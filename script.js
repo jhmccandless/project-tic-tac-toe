@@ -37,66 +37,59 @@ const init = function () {
 };
 init();
 
-const checkWin = function (selectedMatrix) {
-  if (selectedMatrix[0] === 1) {
+const checkWin = function (selectedMatrix, count) {
+  if (count == 9) {
+    winner.textContent = "No Winner, Play Again!";
+  } else if (selectedMatrix[0] === 1) {
     if (selectedMatrix[1] === 1) {
       if (selectedMatrix[2] === 1) {
         winingLine.id = "row1win";
         playing = false;
       }
-    }
-    if (selectedMatrix[3] === 1) {
+    } else if (selectedMatrix[3] === 1) {
       if (selectedMatrix[6] === 1) {
         winingLine.id = "column1win";
         playing = false;
       }
-    }
-    if (selectedMatrix[4] === 1) {
+    } else if (selectedMatrix[4] === 1) {
       if (selectedMatrix[8] === 1) {
         winingLine.id = "diagTLBR";
         playing = false;
       }
     }
-  }
-  if (selectedMatrix[3] === 1) {
+  } else if (selectedMatrix[3] === 1) {
     if (selectedMatrix[4] === 1) {
       if (selectedMatrix[5] === 1) {
         winingLine.id = "row2win";
         playing = false;
       }
     }
-  }
-  if (selectedMatrix[6] === 1) {
+  } else if (selectedMatrix[6] === 1) {
     if (selectedMatrix[7] === 1) {
       if (selectedMatrix[8] === 1) {
         winingLine.id = "row3win";
         playing = false;
       }
     }
-  }
-  if (selectedMatrix[1] === 1) {
+  } else if (selectedMatrix[1] === 1) {
     if (selectedMatrix[4] === 1) {
       if (selectedMatrix[7] === 1) {
         winingLine.id = "column2win";
         playing = false;
       }
     }
-  }
-  if (selectedMatrix[2] === 1) {
+  } else if (selectedMatrix[2] === 1) {
     if (selectedMatrix[5] === 1) {
       if (selectedMatrix[8] === 1) {
         winingLine.id = "column3win";
         playing = false;
       }
-    }
-    if (selectedMatrix[4] === 1) {
+    } else if (selectedMatrix[4] === 1) {
       if (selectedMatrix[6] === 1) {
         winingLine.id = "diagTRBL";
         playing = false;
       }
     }
-  } else if (counter === 9) {
-    winner.textContent = "No Winner, Play Again!";
   }
 };
 
@@ -110,14 +103,14 @@ const playerMatixUpdate = function () {
   if (activePlayer === 1) {
     matrix1[boxNum - 1] = 1;
     counter++;
-    checkWin(matrix1);
+    checkWin(matrix1, counter);
     if (!playing) {
       winner.textContent = "X's Win!";
     }
   } else {
     matrix0[boxNum - 1] = 1;
     counter++;
-    checkWin(matrix0);
+    checkWin(matrix0, counter);
     if (!playing) {
       winner.textContent = "O's Win!";
     }
