@@ -9,68 +9,82 @@
   </head>
   <body>
     <h1>Tic-Tac-Toe</h1>
-    <h3>~ X's start by clicking on any square ~</h3>
+    <h4>Each player has 10 seconds to choose!</h4>
+    <div class="game-status">
+      <div class='stattime'>
+        <a>X's Score:</a>
+        <div id="x-counter"></div>
+      </div>
+      <div class='stattime'>
+        <a>Timer:</a>
+        <div id="timer"></div>
+      </div>
+      <div class='stattime'>
+        <a>O's Score:</a>
+        <div id="o-counter">5</div>
+      </div>
+    </div>
     <div class="line-div">
-      <div class="win-line" id="row3win"></div>
+      <div class="win-line" id="diagTLBR"></div>
     </div>
     <div class="wrapper">
-      <div class="block" id="box-1">
+      <div class="block solid" id="box-1">
         <div class="board-btn-div" id="brd-btn-1">
         </div>
         <div class="selection-div" id="sel-1">
           <a class="selection" id="text-1">O</a>
         </div>
       </div>
-      <div class="block" id="box-2">
+      <div class="block solid" id="box-2">
         <div class="board-btn-div" id="brd-btn-2">
         </div>
         <div class="selection-div" id="sel-2">
           <a class="selection" id="text-2">X</a>
         </div>
       </div>
-      <div class="block" id="box-3">
+      <div class="block solid" id="box-3">
         <div class="board-btn-div" id="brd-btn-3">
         </div>
         <div class="selection-div" id="sel-3">
           <a class="selection" id="text-3">X</a>
         </div>
       </div>
-      <div class="block" id="box-4">
+      <div class="block solid" id="box-4">
         <div class="board-btn-div" id="brd-btn-4">
         </div>
         <div class="selection-div" id="sel-4">
           <a class="selection" id="text-4">O</a>
         </div>
       </div>
-      <div class="block" id="box-5">
+      <div class="block solid" id="box-5">
         <div class="board-btn-div" id="brd-btn-5">
         </div>
         <div class="selection-div" id="sel-5">
           <a class="selection" id="text-5">O</a>
         </div>
       </div>
-      <div class="block" id="box-6">
+      <div class="block solid" id="box-6">
         <div class="board-btn-div" id="brd-btn-6">
         </div>
         <div class="selection-div" id="sel-6">
           <a class="selection" id="text-6">O</a>
         </div>
       </div>
-      <div class="block" id="box-7">
+      <div class="block solid" id="box-7">
         <div class="board-btn-div" id="brd-btn-7">
         </div>
         <div class="selection-div" id="sel-7">
           <a class="selection" id="text-7">O</a>
         </div>
       </div>
-      <div class="block" id="box-8">
+      <div class="block solid" id="box-8">
         <div class="board-btn-div" id="brd-btn-8">
         </div>
         <div class="selection-div" id="sel-8">
           <a class="selection" id="text-8">O</a>
         </div>
       </div>
-      <div class="block" id="box-9">
+      <div class="block solid" id="box-9">
         <div class="board-btn-div" id="brd-btn-9">
         </div>
         <div class="selection-div" id="sel-9">
@@ -80,8 +94,15 @@
     </div>
     <h1 class="winner-banner">X's Win!</h1>
     <div class="btn-div">
+      <button id="clear-board">Clear Board</button>
       <button id="new-game">New Game</button>
     </div>
+    <audio id="cheer-sound">
+      <source src=cheering.mp3 type='audio/mp3'>
+    </audio>
+    <audio id="boo-sound" >
+      <source src=booing.mp3 type="audio/mp3">
+    </audio>
     <script src="script.js"></script>
   </body>
 </html>

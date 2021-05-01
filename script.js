@@ -1,95 +1,143 @@
 "use strict";
 
-/////////////philippes way///////////
-// for (let i = 1; i <= 9; ++i) {
-//   const buttonId = "#btn-" + i;
-//   document.querySelector(buttonId).addEventListener("click", () => {
-//     const areaId = "#sel-" + i;
-//     document.querySelector(areaId).style.visibility = "visible";
+/*
+// Draw a line across the winning 3 in a row.
+// Play a sound when a winner is declared.
+// Set a time limit for turn and show a count down timer. If they miss their turn then randomly assign them a block.
+// Incorporate graphic XOs to add style.
+// Show a winning image when a winner is declared.
+// Add styling and colors to make it look good.
+*/
 
-//     const parentId = "#brd-btn-" + i;
-//     document.querySelector(parentId).style.visibility = "hidden";
-//   });
-// }
-let boxNum, gameInput, activePlayer, playing, matrix1, matrix0, counter;
+let boxNum,
+  gameInput,
+  activePlayer,
+  playing,
+  matrix1,
+  matrix0,
+  counter,
+  xTotal,
+  oTotal,
+  timer,
+  mainMatrix,
+  count;
 
-const button1 = document.querySelector("#brd-btn-1");
-const button2 = document.querySelector("#brd-btn-2");
-const button3 = document.querySelector("#brd-btn-3");
-const button4 = document.querySelector("#brd-btn-4");
-const button5 = document.querySelector("#brd-btn-5");
-const button6 = document.querySelector("#brd-btn-6");
-const button7 = document.querySelector("#brd-btn-7");
-const button8 = document.querySelector("#brd-btn-8");
-const button9 = document.querySelector("#brd-btn-9");
 const winingLine = document.querySelector(".win-line");
 const winner = document.querySelector(".winner-banner");
+const xCounter = document.querySelector("#x-counter");
+const oCounter = document.querySelector("#o-counter");
+const cheering = document.querySelector("#cheer-sound");
+const booing = document.querySelector("#boo-sound");
+const timerDisplay = document.querySelector("#timer");
+
+const buttons = [];
+for (let i = 1; i <= 10; i++) {
+  buttons.push(document.querySelector(`#brd-btn-${i}`));
+}
+
+const countdown = function () {
+  if (timer > 1) {
+    timer--;
+    timerDisplay.textContent = timer;
+    stopTimer();
+    count = setTimeout(countdown, 1000);
+  } else if (timer === 1) {
+    randomBox();
+  }
+};
+
+const stopTimer = function () {
+  clearInterval(count);
+};
 
 const init = function () {
+  playing = true;
   activePlayer = 1;
   gameInput = "X";
+  mainMatrix = [0, 0, 0, 0, 0, 0, 0, 0, 0];
   matrix1 = [0, 0, 0, 0, 0, 0, 0, 0, 0];
   matrix0 = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-  playing = true;
   counter = 0;
+  xTotal = 0;
+  oTotal = 0;
+  xCounter.textContent = xTotal;
+  oCounter.textContent = oTotal;
   winner.textContent = "";
   winingLine.removeAttribute("id");
+  timer = 11;
+  timerDisplay.textContent = timer;
+  countdown();
 };
 init();
 
-const checkWin = function (selectedMatrix, count) {
-  if (count == 9) {
-    winner.textContent = "No Winner, Play Again!";
-  } else if (selectedMatrix[0] === 1) {
-    if (selectedMatrix[1] === 1) {
-      if (selectedMatrix[2] === 1) {
-        winingLine.id = "row1win";
-        playing = false;
-      }
-    } else if (selectedMatrix[3] === 1) {
-      if (selectedMatrix[6] === 1) {
-        winingLine.id = "column1win";
-        playing = false;
-      }
-    } else if (selectedMatrix[4] === 1) {
-      if (selectedMatrix[8] === 1) {
-        winingLine.id = "diagTLBR";
-        playing = false;
-      }
+const randomBox = function () {
+  let index;
+  const indicies = [];
+  for (let i = 0; i < mainMatrix.length; i++) {
+    if (mainMatrix[i] === 0) {
+      indicies.push(i);
     }
-  } else if (selectedMatrix[3] === 1) {
+  }
+  index = indicies[[Math.floor(Math.random() * indicies.length)]];
+  boxNum = [index + 1];
+  updateUI();
+  playerMatixUpdate();
+  playerChange();
+};
+
+const checkWin = function (selectedMatrix, count) {
+  if (selectedMatrix[0] === 1) {
+    if (selectedMatrix[1] + selectedMatrix[2] === 2) {
+      winingLine.id = "row1win";
+      playing = false;
+    }
+    if (selectedMatrix[3] + selectedMatrix[6] === 2) {
+      winingLine.id = "column1win";
+      playing = false;
+    }
+    if (selectedMatrix[4] + selectedMatrix[8] === 2) {
+      winingLine.id = "diagTLBR";
+      playing = false;
+    }
+  }
+  if (selectedMatrix[3] === 1) {
     if (selectedMatrix[4] === 1) {
       if (selectedMatrix[5] === 1) {
         winingLine.id = "row2win";
         playing = false;
       }
     }
-  } else if (selectedMatrix[6] === 1) {
+  }
+  if (selectedMatrix[6] === 1) {
     if (selectedMatrix[7] === 1) {
       if (selectedMatrix[8] === 1) {
         winingLine.id = "row3win";
         playing = false;
       }
     }
-  } else if (selectedMatrix[1] === 1) {
+  }
+  if (selectedMatrix[1] === 1) {
     if (selectedMatrix[4] === 1) {
       if (selectedMatrix[7] === 1) {
         winingLine.id = "column2win";
         playing = false;
       }
     }
-  } else if (selectedMatrix[2] === 1) {
-    if (selectedMatrix[5] === 1) {
-      if (selectedMatrix[8] === 1) {
-        winingLine.id = "column3win";
-        playing = false;
-      }
-    } else if (selectedMatrix[4] === 1) {
-      if (selectedMatrix[6] === 1) {
-        winingLine.id = "diagTRBL";
-        playing = false;
-      }
+  }
+  if (selectedMatrix[2] === 1) {
+    if (selectedMatrix[5] + selectedMatrix[8] === 2) {
+      winingLine.id = "column3win";
+      playing = false;
     }
+    if (selectedMatrix[4] + selectedMatrix[6] === 2) {
+      winingLine.id = "diagTRBL";
+      playing = false;
+    }
+  }
+  if (count === 9 && playing) {
+    winner.textContent = "No Winner, Play Again!";
+    stopTimer();
+    booing.play();
   }
 };
 
@@ -102,17 +150,35 @@ const updateUI = function () {
 const playerMatixUpdate = function () {
   if (activePlayer === 1) {
     matrix1[boxNum - 1] = 1;
+    mainMatrix[boxNum - 1] = 1;
     counter++;
     checkWin(matrix1, counter);
+    timer = 11;
+    timerDisplay.textContent = timer;
+    countdown();
     if (!playing) {
       winner.textContent = "X's Win!";
+      cheering.play();
+      xTotal++;
+      xCounter.textContent = xTotal;
+      timerDisplay.textContent = 0;
+      stopTimer();
     }
-  } else {
+  } else if (activePlayer === 0) {
     matrix0[boxNum - 1] = 1;
+    mainMatrix[boxNum - 1] = 1;
     counter++;
     checkWin(matrix0, counter);
+    timer = 11;
+    timerDisplay.textContent = timer;
+    countdown();
     if (!playing) {
       winner.textContent = "O's Win!";
+      cheering.play();
+      oTotal++;
+      oCounter.textContent = oTotal;
+      timerDisplay.textContent = 0;
+      stopTimer();
     }
   }
 };
@@ -127,6 +193,28 @@ const playerChange = function () {
   }
 };
 
+document.querySelector("#clear-board").addEventListener("click", function () {
+  const btnDivSelect = document.getElementsByClassName("board-btn-div");
+  const selDiv = document.getElementsByClassName("selection-div");
+  for (let i = 0; i < 9; i++) {
+    btnDivSelect[i].style.visibility = "visible";
+    selDiv[i].style.visibility = "hidden";
+  }
+  playing = true;
+  activePlayer = 1;
+  gameInput = "X";
+  mainMatrix = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+  matrix1 = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+  matrix0 = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+  counter = 0;
+  xCounter.textContent = xTotal;
+  oCounter.textContent = oTotal;
+  winner.textContent = "";
+  winingLine.removeAttribute("id");
+  timer = 10;
+  timerDisplay.textContent = timer;
+});
+
 document.querySelector("#new-game").addEventListener("click", function () {
   const btnDivSelect = document.getElementsByClassName("board-btn-div");
   const selDiv = document.getElementsByClassName("selection-div");
@@ -137,75 +225,13 @@ document.querySelector("#new-game").addEventListener("click", function () {
   init();
 });
 
-button1.addEventListener("click", function () {
-  if (playing) {
-    boxNum = 1;
-    updateUI();
-    playerMatixUpdate();
-    playerChange();
-  }
-});
-button2.addEventListener("click", function () {
-  if (playing) {
-    boxNum = 2;
-    updateUI();
-    playerMatixUpdate();
-    playerChange();
-  }
-});
-button3.addEventListener("click", function () {
-  if (playing) {
-    boxNum = 3;
-    updateUI();
-    playerMatixUpdate();
-    playerChange();
-  }
-});
-button4.addEventListener("click", function () {
-  if (playing) {
-    boxNum = 4;
-    updateUI();
-    playerMatixUpdate();
-    playerChange();
-  }
-});
-button5.addEventListener("click", function () {
-  if (playing) {
-    boxNum = 5;
-    updateUI();
-    playerMatixUpdate();
-    playerChange();
-  }
-});
-button6.addEventListener("click", function () {
-  if (playing) {
-    boxNum = 6;
-    updateUI();
-    playerMatixUpdate();
-    playerChange();
-  }
-});
-button7.addEventListener("click", function () {
-  if (playing) {
-    boxNum = 7;
-    updateUI();
-    playerMatixUpdate();
-    playerChange();
-  }
-});
-button8.addEventListener("click", function () {
-  if (playing) {
-    boxNum = 8;
-    updateUI();
-    playerMatixUpdate();
-    playerChange();
-  }
-});
-button9.addEventListener("click", function () {
-  if (playing) {
-    boxNum = 9;
-    updateUI();
-    playerMatixUpdate();
-    playerChange();
-  }
-});
+for (let i = 0; i < buttons.length - 1; i++) {
+  buttons[i].addEventListener("click", function () {
+    if (playing) {
+      boxNum = [i + 1];
+      updateUI();
+      playerMatixUpdate();
+      playerChange();
+    }
+  });
+}
