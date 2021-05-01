@@ -136,7 +136,6 @@ const checkWin = function (selectedMatrix, count) {
   }
   if (count === 9 && playing) {
     winner.textContent = "No Winner, Play Again!";
-    stopTimer();
     booing.play();
   }
 };
@@ -156,12 +155,15 @@ const playerMatixUpdate = function () {
     timer = 11;
     timerDisplay.textContent = timer;
     countdown();
-    if (!playing) {
+    if (!playing && counter < 9) {
       winner.textContent = "X's Win!";
       cheering.play();
       xTotal++;
       xCounter.textContent = xTotal;
       timerDisplay.textContent = 0;
+      stopTimer();
+    } else if (counter === 9) {
+      playing = false;
       stopTimer();
     }
   } else if (activePlayer === 0) {
@@ -211,8 +213,9 @@ document.querySelector("#clear-board").addEventListener("click", function () {
   oCounter.textContent = oTotal;
   winner.textContent = "";
   winingLine.removeAttribute("id");
-  timer = 10;
+  timer = 11;
   timerDisplay.textContent = timer;
+  countdown();
 });
 
 document.querySelector("#new-game").addEventListener("click", function () {
@@ -223,6 +226,7 @@ document.querySelector("#new-game").addEventListener("click", function () {
     selDiv[i].style.visibility = "hidden";
   }
   init();
+  timer = 11;
   countdown();
 });
 
