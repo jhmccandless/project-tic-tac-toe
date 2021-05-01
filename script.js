@@ -64,9 +64,9 @@ const init = function () {
   oCounter.textContent = oTotal;
   winner.textContent = "";
   winingLine.removeAttribute("id");
-  timer = 11;
+  timer = 10;
   timerDisplay.textContent = timer;
-  countdown();
+  // countdown();
 };
 init();
 
@@ -223,6 +223,7 @@ document.querySelector("#new-game").addEventListener("click", function () {
     selDiv[i].style.visibility = "hidden";
   }
   init();
+  countdown();
 });
 
 for (let i = 0; i < buttons.length - 1; i++) {
